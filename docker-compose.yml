@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+    paste:
+        build:
+          context: .
+          dockerfile: Dockerfile
+        ports:
+            - "18200:18200"
+        volumes:
+          - "./data:/app/data"

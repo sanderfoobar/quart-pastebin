@@ -1,0 +1,482 @@
+/*
+A custom Bootstrap 3.2 'Google Plus style' theme
+from http://bootply.com
+
+This CSS code should follow the 'bootstrap.css'
+in your HTML file.
+
+license: MIT
+author: bootply.com
+*/
+@import url(https://fonts.googleapis.com/css?family=Roboto:400);
+
+body {
+    background-color: #e0e0e0;
+    -webkit-font-smoothing: antialiased;
+    font: normal 14px Roboto, arial, sans-serif;
+}
+
+.navbar-default {
+    background-color: #f4f4f4;
+    margin-top: 50px;
+    border-width: 0;
+    z-index: 5;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > li:hover > a {
+    border: 0 solid #4285f4;
+    border-bottom-width: 2px;
+    font-weight: 800;
+    background-color: transparent;
+}
+
+.navbar-default .dropdown-menu {
+    background-color: #ffffff;
+}
+
+.navbar-default .dropdown-menu li > a {
+    padding-left: 30px;
+}
+
+.header {
+    background-color: #ffffff;
+    border-width: 0;
+}
+
+.header .navbar-collapse {
+    background-color: #ffffff;
+}
+
+.btn, .form-control, .panel, .list-group, .well {
+    border-radius: 1px;
+    box-shadow: 0 0 0;
+}
+
+.form-control {
+    border-color: #d7d7d7;
+}
+
+.btn-primary {
+    border-color: transparent;
+}
+
+.btn-primary, .label-primary, .list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+    background-color: #4285f4;
+}
+
+.btn-plus {
+    background-color: #ffffff;
+    border-width: 1px;
+    border-color: #dddddd;
+    box-shadow: 1px 1px 0 #999999;
+    border-radius: 3px;
+    color: #666666;
+    text-shadow: 0 0 1px #bbbbbb;
+}
+
+.well, .panel {
+    border-color: #d2d2d2;
+    box-shadow: 0 1px 0 #cfcfcf;
+    border-radius: 3px;
+}
+
+.btn-success, .label-success, .progress-bar-success {
+    background-color: #65b045;
+}
+
+.btn-info, .label-info, .progress-bar-info {
+    background-color: #a0c3ff;
+    border-color: #a0c3ff;
+}
+
+.btn-danger, .label-danger, .progress-bar-danger {
+    background-color: #dd4b39;
+}
+
+.btn-warning, .label-warning, .progress-bar-warning {
+    background-color: #f4b400;
+    color: #444444;
+}
+
+hr {
+    border-color: #ececec;
+}
+
+button {
+    outline: 0;
+}
+
+textarea {
+    resize: none;
+    outline: 0;
+}
+
+.panel .btn i, .btn span {
+    color: #666666;
+}
+
+.panel .panel-heading {
+    background-color: #ffffff;
+    font-weight: 700;
+    font-size: 16px;
+    color: #262626;
+    border-color: #ffffff;
+}
+
+.panel .panel-heading a {
+    font-weight: 400;
+    font-size: 11px;
+}
+
+.panel .panel-default {
+    border-color: #cccccc;
+}
+
+.panel .panel-thumbnail {
+    padding: 0;
+}
+
+.panel .img-circle {
+    width: 50px;
+    height: 50px;
+}
+
+.list-group-item:first-child, .list-group-item:last-child {
+    border-radius: 0;
+}
+
+h3, h4, h5 {
+    border: 0 solid #efefef;
+    border-bottom-width: 1px;
+    padding-bottom: 10px;
+}
+
+.modal-dialog {
+    width: 450px;
+}
+
+.modal-footer {
+    border-width: 0;
+}
+
+.dropdown-menu {
+    background-color: #f4f4f4;
+    border-color: #f0f0f0;
+    border-radius: 0;
+    margin-top: -1px;
+}
+
+/* end theme */
+
+/* template layout*/
+#subnav {
+    position: fixed;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    #subnav {
+        padding-top: 6px;
+    }
+}
+
+#main {
+    padding-top: 20px;
+}
+
+.chooseLanguage, .chooseExpiration {
+    float: right;
+}
+
+.chooseExpiration {
+    margin-right: 20px;
+}
+
+div.submit {
+    float: right;
+}
+
+p.public, p.private {
+    float: left;
+    font-size: 0.85em;
+    font-weight: 400;
+}
+
+.submit .locker {
+    margin-right: 1.7em;
+}
+
+#menu_2 {
+    overflow: hidden;
+}
+
+ul.right_menu {
+    margin: 0;
+    padding: 0;
+}
+
+.right_menu li {
+    background: url("/static/img/globe2.png") no-repeat 0 7px;
+    background-size: 14px;
+    background-position-x: 15px;
+    border-top: 1px dotted #ddd;
+    color: #ddd;
+    font-size: .75em;
+    line-height: 16px;
+    list-style: none;
+    overflow: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 5px 0px 5px 36px;
+}
+
+.right_menu a {
+    color: #3b86cc;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.right_menu span {
+    color: #999;
+    display: block;
+}
+
+#recent .panel-body {
+    padding: 0;
+}
+
+#recent h4 {
+    border: 0;
+    padding-bottom: 0;
+    padding-left: 16px;
+}
+
+#dashed_stuff {
+    height: 100%;
+}
+
+#img_thingy {
+    width: 200px;
+    font-size: 12px;
+    color: #a2a2a2;
+    padding-top: 6px;
+}
+
+.box__dragndrop,
+.box__uploading,
+.box__success,
+.box__error {
+    display: none;
+}
+
+.box input {
+    display: none;
+}
+
+.box {
+    font-size: 1.25rem;
+    position: relative;
+    padding: 8px 16px;
+    height: 90px;
+}
+
+.box label {
+    width: 100%;
+    font-weight: inherit;
+    cursor: pointer;
+    height: 76px;
+    text-align: center;
+    color: grey;
+    padding-top: 22px;
+}
+
+.box.has-advanced-upload {
+    outline: 2px dashed #e3e3e3;
+    outline-offset: -10px;
+
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear;
+}
+
+.box.is-dragover {
+    outline-offset: -7px;
+    outline-color: #c8dadf;
+    background-color: #fff;
+}
+
+.box__dragndrop,
+.box__icon {
+    display: none;
+}
+
+.box.has-advanced-upload .box__dragndrop {
+    display: inline;
+}
+
+.box.has-advanced-upload .box__icon {
+    width: 100%;
+    height: 80px;
+    fill: #92b0b3;
+    display: block;
+    margin-bottom: 40px;
+}
+
+.box.is-uploading .box__input,
+.box.is-success .box__input,
+.box.is-error .box__input {
+    visibility: hidden;
+}
+
+.box__uploading,
+.box__success,
+.box__error {
+    display: none;
+}
+
+.box.is-uploading .box__uploading,
+.box.is-success .box__success,
+.box.is-error .box__error {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.box__uploading {
+    font-style: italic;
+}
+
+.box__success {
+    -webkit-animation: appear-from-inside .25s ease-in-out;
+    animation: appear-from-inside .25s ease-in-out;
+}
+
+@-webkit-keyframes appear-from-inside {
+    from {
+        -webkit-transform: translateY(-50%) scale(0);
+    }
+    75% {
+        -webkit-transform: translateY(-50%) scale(1.1);
+    }
+    to {
+        -webkit-transform: translateY(-50%) scale(1);
+    }
+}
+
+@keyframes appear-from-inside {
+    from {
+        transform: translateY(-50%) scale(0);
+    }
+    75% {
+        transform: translateY(-50%) scale(1.1);
+    }
+    to {
+        transform: translateY(-50%) scale(1);
+    }
+}
+
+.box__restart {
+    font-weight: 700;
+}
+
+.box__restart:focus,
+.box__restart:hover {
+    color: #39bfd3;
+}
+
+.js .box__file {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.js .box__file + label {
+    max-width: 80%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.js .box__file + label:hover strong,
+.box__file:focus + label strong,
+.box__file.has-focus + label strong {
+    color: #39bfd3;
+}
+
+.js .box__file:focus + label,
+.js .box__file.has-focus + label {
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+
+.js .box__file + label * {
+    /* pointer-events: none; */
+    /* in case of FastClick lib use */
+}
+
+.no-js .box__file + label {
+    display: none;
+}
+
+.no-js .box__button {
+    display: block;
+}
+
+.box__button {
+    font-weight: 700;
+    color: #e5edf1;
+    background-color: #39bfd3;
+    display: none;
+    padding: 8px 16px;
+    margin: 40px auto 0;
+}
+
+.box__button:hover,
+.box__button:focus {
+    background-color: #0f3c4b;
+}
+
+.hljs {
+    background: transparent !important;
+}
+
+textarea.pastebox {
+    border: 1px solid #d1d1d1;
+}
+
+.paste-body {
+    padding-top: 0px;
+}
+.paste-body pre {
+    background: transparent;
+    border: 0;
+    padding: 0;
+}
+
+.hljs-ln td {
+    padding-right: 20px;
+}
+
+.hljs-ln-numbers {
+    color: #d1d1d1;
+}
+
+.imgg {
+    display: contents;
+    margin-left: 20px;
+    background: red;
+}
+
+.imgg > a > img {
+    display: block;
+    max-width: 1024px;
+}

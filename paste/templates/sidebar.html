@@ -1,0 +1,34 @@
+<div class="col-md-3 col-sm-3" id="recent">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form method="post" action="/paste/img" enctype="multipart/form-data" novalidate class="box">
+        <div class="box__input">
+          <input type="file" name="files[]" id="file" class="box__file" data-multiple-caption="{count} files selected" multiple/>
+
+          <div id="dashed_stuff">
+            <label for="file">
+              <center>
+                <div id="img_thingy" style="width:200px;padding-top: 0px;">
+                  Upload Image(s) (drag/click)
+                  <br>
+                  <img style="opacity: 0.4;" width="20px" src="/static/img/down.png"/>
+                </div>
+              </center>
+            </label>
+          </div>
+          <button type="submit" class="box__button">Upload</button>
+        </div>
+        <div class="box__uploading">Uploading&hellip;</div>
+        <div class="box__success">Done! <a href="#" class="box__restart" role="button">Upload more?</a></div>
+        <div class="box__error">Error!</div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>(function (e, t, n) {
+    var r = e.querySelectorAll("html")[0];
+    r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2")
+})(document, window, 0);</script>
+
+<script src="/static/js/image.js"></script>

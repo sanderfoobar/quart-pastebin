@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+<script>
+  hljs.initHighlightingOnLoad();
+  hljs.initLineNumbersOnLoad();
+</script>
+
+{% set url_raw = url_for("paste_view", _type=_type, uid=paste['uid'], raw="raw") %}
+{% set content = paste['content'] %}
+{% set syntax = paste['syntax'] %}
+
+<!--main-->
+<div class="container" id="main">
+  <div class="row">
+    {% include 'header.html' %}
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading"></div>
+        <div class="panel-body paste-body">
+          <p>
+            <a style="display: block; float: right;margin-right: 10px;" href="{{ url_raw }}" class="subtle">Raw</a>
+          </p>
+          <pre><code class="{{ syntax }}">{{ content }}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    {% include 'footer.html' %}
+
+  </div>
+  <!--/main-->
+  {% endblock %}
