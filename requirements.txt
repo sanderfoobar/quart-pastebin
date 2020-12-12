@@ -2,3 +2,4 @@ quart
 python-magic
 pillow-simd
 hypercorn
+aiofiles
