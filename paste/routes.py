@@ -1,24 +1,27 @@
-import magic
 import re
-from quart import render_template, request, redirect, url_for, jsonify
 
-from paste.factory import app
+import magic
+from quart.exceptions import NotFound
+from quart import render_template, request, redirect, url_for, jsonify, Blueprint, abort
+
 from paste.utils import sanitize_expiration
 from paste.paste import Pastes
 
+bp_routes = Blueprint('routes', __name__)
 
-@app.route('/')
+
+@bp_routes.route('/')
 async def index():
     return await render_template("index.html")
 
 
-@app.route("/<path:_type>/<uuid:uid>")
-@app.route("/<path:_type>/<uuid:uid>/<path:raw>")
+@bp_routes.route("/<any(p, a, i):_type>/<uuid:uid>")
+@bp_routes.route("/<any(p, a, i):_type>/<uuid:uid>/<path:raw>")
 async def paste_view(_type, uid, raw=None):
     if _type == "p":
         paste = await Pastes.read_plain_uid(uid)
         if not paste:
-            raise Exception("Paste by that id not found :(")
+            return abort(404, "No such paste.")
         if raw:
             return paste["content"], {
                 'Content-Type': 'text/plain',
@@ -26,18 +29,21 @@ async def paste_view(_type, uid, raw=None):
             }
         return await render_template("paste.html", _type=_type, paste=paste)
     elif _type == "a":
-        images = await Pastes.read_album_uid(uid)
-        return await render_template("album.html", _type=_type, album=images)
+        album = await Pastes.read_album_uid(uid)
+        if not album:
+            return abort(404, "Album not found.")
+        return await render_template("album.html", _type=_type, album=album)
     elif _type == "i":
         image = await Pastes.read_image_uid(uid)
+        if not image:
+            return abort(404, "Image not found.")
         return image, {
             "Content-Type": magic.from_buffer(image, mime=True),
             "Content-Disposition": f"inline; filename={str(uid)}.png"
         }
-    raise Exception("bad URL")
 
 
-@app.route("/paste/plain", methods=["POST"])
+@bp_routes.route("/paste/plain", methods=["POST"])
 async def paste_plain():
     content = await request.form
     body = content.get("paste[body]", "").encode()
@@ -45,17 +51,17 @@ async def paste_plain():
     expiration = sanitize_expiration(content.get("paste[expir]", 0))
 
     if not body:
-        raise Exception("No content")
+        return abort(422, "incomprehensible content")
 
     uid = await Pastes.write_plain(
         syntax=lang,
         expiration=expiration,
         contents=body)
 
-    return redirect(url_for("paste_view", _type="p", uid=uid))
+    return redirect(url_for("routes.paste_view", _type="p", uid=uid))
 
 
-@app.route("/paste/img", methods=["POST"])
+@bp_routes.route("/paste/img", methods=["POST"])
 async def paste_img():
     allowed_extensions = [".png", ".jpg", ".gif", ".webm"]
     expiration = sanitize_expiration(request.args.get("expiration", 86400))
@@ -63,7 +69,7 @@ async def paste_img():
     files = await request.files
     files = files.getlist("files[]")
     if not files:
-        raise Exception("no content")
+        return abort(400, "no content")
 
     images = []
     for file in files:
@@ -73,15 +79,17 @@ async def paste_img():
             images.append(file.read())
 
     if not images:
-        raise Exception("no content")
+        return abort(400, "no content")
 
     album_uid = await Pastes.write_album(images, expiration)
     images = await Pastes.read_album_uid(album_uid)
+    if not images:
+        return abort(400, "no content")
 
     if len(images) > 1:
-        url = url_for("paste_view", _type="a", uid=album_uid)
+        url = url_for("routes.paste_view", _type="a", uid=album_uid)
     else:
-        url = url_for("paste_view", _type="i", uid=images[0]['uid'], raw="raw")
+        url = url_for("routes.paste_view", _type="i", uid=images[0]['uid'], raw="raw")
 
     return jsonify({
         "success": True,
@@ -89,12 +97,17 @@ async def paste_img():
     })
 
 
-@app.errorhandler(404)
-@app.errorhandler(500)
+@bp_routes.errorhandler(404)
+@bp_routes.errorhandler(500)
 async def error(e):
-    return await render_template("error.html", message=str(e))
+    msg = str(e)
+    if isinstance(e, NotFound):
+        if e.description:
+            msg = f"{msg} - {e.description}"
+
+    return await render_template("error.html", message=msg)
 
 
-@app.route("/favicon.ico")
+@bp_routes.route("/favicon.ico")
 async def favicon():
     return "ok", 200

@@ -8,7 +8,7 @@
   </div>
 
   {% for image in album %}
-    {% set url_raw = url_for("paste_view", _type="i", uid=image['uid'], raw="raw") %}
+    {% set url_raw = url_for("routes.paste_view", _type="i", uid=image['uid'], raw="raw") %}
     <div class="row">
       <div class="col-md-12 col-sm-12">
         <div class="panel panel-default">

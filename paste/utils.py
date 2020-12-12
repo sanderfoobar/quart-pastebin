@@ -11,7 +11,6 @@ from datetime import datetime, timedelta
 from PIL import Image
 
 import settings
-from paste.factory import app
 from paste.paste import Pastes
 
 
@@ -52,6 +51,7 @@ async def loop_task(secs: int, func, after_func=None):
 class Cleanup:
     @staticmethod
     async def task():
+        from paste.factory import app
         data_dir_size = sum(f.stat().st_size for f in Path('data').glob('*') if f.is_file())
         if data_dir_size > settings.max_size_data_dir:
             app.logger.warning("Max file sized reached for data dir; cleaning")

@@ -5,6 +5,7 @@ import asyncio
 from quart import Quart
 
 import settings
+from paste.routes import bp_routes
 
 app = None
 
@@ -12,7 +13,6 @@ app = None
 def create_app():
     global app
     app = Quart(__name__)
-    app.config['TEMPLATES_AUTO_RELOAD'] = settings.debug
     app.config['MAX_CONTENT_LENGTH'] = settings.max_content_upload
     app.logger.setLevel(logging.INFO)
 
@@ -27,6 +27,6 @@ def create_app():
         from paste.utils import loop_task, Cleanup
         loop.create_task(loop_task(600, Cleanup.task))
 
-        import paste.routes
+        app.register_blueprint(bp_routes)
 
     return app
