@@ -4,9 +4,11 @@ import uuid
 from typing import Union, List
 
 import magic
+import aiofiles
 from quart import request
 
 import settings
+from paste.factory import app
 
 
 class Pastes:
@@ -41,14 +43,12 @@ class Pastes:
         :param uid:
         :return:
         """
-        fn = await Pastes.find_by_uid(uid)
-        if not fn:
+        path = await Pastes.find_by_uid(uid)
+        if not path:
             raise Exception("no such uuid")
 
-        f = open(fn, "rb")
-        image = f.read()
-        f.close()
-        return image
+        async with aiofiles.open(path, mode="rb") as f:
+            return await f.read()
 
     @staticmethod
     async def write_plain(contents: bytes, expiration: int = 0, syntax: str = None) -> str:
@@ -71,11 +71,11 @@ class Pastes:
             "expiration": expiration
         }, sort_keys=True)
 
-        f = open(out_path, "wb")
-        f.write(metadata.encode())
-        f.write(b"\n")
-        f.write(contents)
-        f.close()
+        async with aiofiles.open(out_path, mode="wb") as f:
+            await f.write(metadata.encode())
+            await f.write(b"\n")
+            await f.write(contents)
+
         return uid
 
     @staticmethod
@@ -101,9 +101,8 @@ class Pastes:
         uid = str(uuid.uuid4())
         out_path = os.path.join(settings.cwd, "data", f"{uid}.png")
 
-        f = open(out_path, "wb")
-        f.write(contents)
-        f.close()
+        async with aiofiles.open(out_path, mode="wb") as f:
+            await f.write(contents)
 
         metadata = {
             "ip": request.remote_addr,
@@ -139,9 +138,8 @@ class Pastes:
         out_dir = os.path.join(settings.cwd, "data")
         out_path = os.path.join(out_dir, f"{uid}.{'expires.' if expiration > 0 else ''}album")
 
-        f = open(out_path, "wb")
-        f.write(metadata.encode())
-        f.close()
+        async with aiofiles.open(out_path, mode="wb") as f:
+            await f.write(metadata.encode())
 
         return uid
 
@@ -151,12 +149,15 @@ class Pastes:
         if not os.path.exists(path):
             raise Exception("path not found")
 
-        f = open(path, "rb")
-        content = f.read()
-        f.close()
+        try:
+            async with aiofiles.open(path, mode="rb") as f:
+                content = await f.read()
 
-        metadata, content = content.split(b"\n", 1)
-        metadata = json.loads(metadata.decode())
+            metadata, content = content.split(b"\n", 1)
+            metadata = json.loads(metadata.decode())
+        except Exception as ex:
+            app.logger.error(f"Could not read {path}; {ex}")
+            return
 
         return {
             "_type": "p",
@@ -171,12 +172,12 @@ class Pastes:
         if not os.path.exists(path):
             raise Exception("path not found")
 
-        f = open(path, "rb")
-        content = f.read()
-        f.close()
-
-        metadata = json.loads(content.decode())
-        return metadata
+        try:
+            async with aiofiles.open(path, mode="rb") as f:
+                content = await f.read()
+            return json.loads(content.decode())
+        except Exception as ex:
+            app.logger.error(f"Could not read {path}; {ex}")
 
     @staticmethod
     async def find_by_uid(uid: Union[str, uuid.UUID]) -> str:
