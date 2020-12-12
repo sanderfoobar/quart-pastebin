@@ -6,7 +6,7 @@
   hljs.initLineNumbersOnLoad();
 </script>
 
-{% set url_raw = url_for("paste_view", _type=_type, uid=paste['uid'], raw="raw") %}
+{% set url_raw = url_for("routes.paste_view", _type=_type, uid=paste['uid'], raw="raw") %}
 {% set content = paste['content'] %}
 {% set syntax = paste['syntax'] %}
 

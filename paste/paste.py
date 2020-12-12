@@ -8,36 +8,35 @@ import aiofiles
 from quart import request
 
 import settings
-from paste.factory import app
 
 
 class Pastes:
     @staticmethod
-    async def read_album_uid(uid: Union[str, uuid.UUID]):
+    async def read_album_uid(uid: Union[str, uuid.UUID]) -> Union[dict, None]:
         """
         Return album by uuid
         :return: metadata dict
         """
         fn = await Pastes.find_by_uid(uid)
         if not fn:
-            raise Exception("no such uuid")
+            return
 
         return await Pastes.read_album_path(fn)
 
     @staticmethod
-    async def read_plain_uid(uid: Union[str, uuid.UUID]) -> dict:
+    async def read_plain_uid(uid: Union[str, uuid.UUID]) -> Union[dict, None]:
         """
         Return paste by uuid
         :return: metadata dict
         """
         fn = await Pastes.find_by_uid(uid)
         if not fn:
-            raise Exception("no such uuid")
+            return
 
         return await Pastes.read_plain_path(fn)
 
     @staticmethod
-    async def read_image_uid(uid: Union[str, uuid.UUID]) -> bytes:
+    async def read_image_uid(uid: Union[str, uuid.UUID]) -> Union[None, bytes]:
         """
         Return a single image by uuid
         :param uid:
@@ -45,7 +44,7 @@ class Pastes:
         """
         path = await Pastes.find_by_uid(uid)
         if not path:
-            raise Exception("no such uuid")
+            return
 
         async with aiofiles.open(path, mode="rb") as f:
             return await f.read()
@@ -156,6 +155,7 @@ class Pastes:
             metadata, content = content.split(b"\n", 1)
             metadata = json.loads(metadata.decode())
         except Exception as ex:
+            from paste.factory import app
             app.logger.error(f"Could not read {path}; {ex}")
             return
 
@@ -177,6 +177,7 @@ class Pastes:
                 content = await f.read()
             return json.loads(content.decode())
         except Exception as ex:
+            from paste.factory import app
             app.logger.error(f"Could not read {path}; {ex}")
 
     @staticmethod
