@@ -1,7 +1,7 @@
 import re
 
 import magic
-from quart.exceptions import NotFound
+from werkzeug.exceptions import NotFound
 from quart import render_template, request, redirect, url_for, jsonify, Blueprint, abort
 
 from paste.utils import sanitize_expiration
