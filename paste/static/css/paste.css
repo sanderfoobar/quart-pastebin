@@ -11,9 +11,14 @@ author: bootply.com
 @import url(https://fonts.googleapis.com/css?family=Roboto:400);
 
 body {
-    background-color: #e0e0e0;
+    background-color: #1f1f1f;
     -webkit-font-smoothing: antialiased;
     font: normal 14px Roboto, arial, sans-serif;
+    color: #d1d1d1;
+}
+
+.panel-body {
+    background-color: black;
 }
 
 .navbar-default {
@@ -75,9 +80,15 @@ body {
 }
 
 .well, .panel {
-    border-color: #d2d2d2;
-    box-shadow: 0 1px 0 #cfcfcf;
+    border-color: #565656;
+    box-shadow: 0 1px 0 #565656;
     border-radius: 3px;
+}
+
+button, input, select, textarea {
+  background: black;
+  color: white;
+  font-size: 18px;
 }
 
 .btn-success, .label-success, .progress-bar-success {
@@ -99,7 +110,7 @@ body {
 }
 
 hr {
-    border-color: #ececec;
+    border-color: #565656;
 }
 
 button {
@@ -113,14 +124,6 @@ textarea {
 
 .panel .btn i, .btn span {
     color: #666666;
-}
-
-.panel .panel-heading {
-    background-color: #ffffff;
-    font-weight: 700;
-    font-size: 16px;
-    color: #262626;
-    border-color: #ffffff;
 }
 
 .panel .panel-heading a {
@@ -198,7 +201,7 @@ div.submit {
 
 p.public, p.private {
     float: left;
-    font-size: 0.85em;
+    font-size: 1em;
     font-weight: 400;
 }
 
@@ -450,16 +453,22 @@ ul.right_menu {
 }
 
 textarea.pastebox {
-    border: 1px solid #d1d1d1;
+    border: 1px solid #565656;
+    background: black;
+    color: white;
+    font-size: 18px;
+    padding:6px;
 }
 
 .paste-body {
-    padding-top: 0px;
+    padding-top: 10px;
 }
 .paste-body pre {
     background: transparent;
     border: 0;
     padding: 0;
+    font-size: 18px;
+    font-family: "Sans Mono", "Consolas", "Courier", monospace;
 }
 
 .hljs-ln td {
@@ -467,7 +476,8 @@ textarea.pastebox {
 }
 
 .hljs-ln-numbers {
-    color: #d1d1d1;
+    color: red;
+    padding-right: 10px !important;
 }
 
 .imgg {

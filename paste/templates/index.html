@@ -3,10 +3,6 @@
 
 <div class="container" id="main">
   <div class="row">
-    {% include 'header.html' %}
-  </div>
-
-  <div class="row">
     <div class="col-md-9 col-sm-9">
       <div class="panel panel-default">
         <div class="panel-body">
@@ -65,24 +61,17 @@
             </div>
 
             <p class="legend" id="legend">
-              <a target="_blank" href="https://github.com/sferdi0/quart-pastebin" class="subtle">Source</a>
+              quart-pastebin
             </p>
 
             <p style="margin-top:20px;">
               <textarea class="pastebox" cols="40" style="width: 100%;" id="paste_body" name="paste[body]" rows="22" tabindex="20"></textarea>
             </p>
 
-            <p class="private" id="private" style="display:none;">
-              <img alt="Object-locked" height="48" src="/static/img/object-locked.png" width="48">
-              <strong>Private.</strong>
-              Share the private access URL responsibly.
-            </p>
-
             <p class="public" id="public">
               <img alt="Network" height="32" src="/static/img/globe.png" width="32">
 
-              <strong style="margin-left: 4px;" id="exposure">Private.</strong>
-              <span id="exposure_text">Share the private access URL responsibly.</span>
+              <strong style="margin-left: 4px;" id="exposure">Pastes are private by default.</strong>
             </p>
 
             <div class="submit" style="margin-bottom:0;">

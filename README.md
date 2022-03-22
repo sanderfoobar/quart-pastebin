@@ -1,14 +1,13 @@
 quart-pastebin
 ============
 
-A minimalistic pastebin.com/pastie.org clone based on `quart`.
+A rather ghetto & minimalistic pastebin.com/pastie.org clone made with `quart`.
 
-![https://i.imgur.com/6i5j3BS.png](https://i.imgur.com/6i5j3BS.png)
+![https://i.imgur.com/tNfqckp.png](https://i.imgur.com/tNfqckp.png)
 
 ## Features
 
 - Filesystem based (no database)
-- Syntax highlighting
 - Paste expiration
 - Image uploader
 - EXIF removal

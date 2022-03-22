@@ -15,14 +15,17 @@ async def index():
     return await render_template("index.html")
 
 
-@bp_routes.route("/<any(p, a, i):_type>/<uuid:uid>")
-@bp_routes.route("/<any(p, a, i):_type>/<uuid:uid>/<path:raw>")
-async def paste_view(_type, uid, raw=None):
+@bp_routes.route("/<any(p, a, i):_type>/<path:uid>")
+@bp_routes.route("/<any(p, a, i):_type>/<path:uid>.<path:extension>")
+async def paste_view(_type, uid: str, extension=None):
+    if not len(uid) == 5:
+        return abort(500)
+
     if _type == "p":
         paste = await Pastes.read_plain_uid(uid)
         if not paste:
             return abort(404, "No such paste.")
-        if raw:
+        if extension:
             return paste["content"], {
                 'Content-Type': 'text/plain',
                 'Cache-Control': 'no-cache'
@@ -57,8 +60,7 @@ async def paste_plain():
         syntax=lang,
         expiration=expiration,
         contents=body)
-
-    return redirect(url_for("routes.paste_view", _type="p", uid=uid))
+    return redirect(url_for("routes.paste_view", _type="p", uid=uid, extension="txt"))
 
 
 @bp_routes.route("/paste/img", methods=["POST"])
@@ -89,7 +91,7 @@ async def paste_img():
     if len(images) > 1:
         url = url_for("routes.paste_view", _type="a", uid=album_uid)
     else:
-        url = url_for("routes.paste_view", _type="i", uid=images[0]['uid'], raw="raw")
+        url = url_for("routes.paste_view", _type="i", uid=images[0]['uid'], extension=images[0]['extension'])
 
     return jsonify({
         "success": True,

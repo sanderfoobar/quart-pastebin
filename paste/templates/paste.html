@@ -3,23 +3,23 @@
 
 <script>
   hljs.initHighlightingOnLoad();
-  hljs.initLineNumbersOnLoad();
 </script>
 
-{% set url_raw = url_for("routes.paste_view", _type=_type, uid=paste['uid'], raw="raw") %}
+{% set url_raw = url_for("routes.paste_view", _type=_type, uid=paste['uid'], extension=paste['extension']) %}
 {% set content = paste['content'] %}
 {% set syntax = paste['syntax'] %}
 
 <!--main-->
 <div class="container" id="main">
   <div class="row">
-    {% include 'header.html' %}
+    <div class="col-md-12">
+      <a href="/">back to home</a>
+    </div>
   </div>
-
+  <br>
   <div class="row">
     <div class="col-md-12 col-sm-12">
       <div class="panel panel-default">
-        <div class="panel-heading"></div>
         <div class="panel-body paste-body">
           <p>
             <a style="display: block; float: right;margin-right: 10px;" href="{{ url_raw }}" class="subtle">Raw</a>

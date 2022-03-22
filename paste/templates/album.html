@@ -3,16 +3,11 @@
 
 <!--main-->
 <div class="container" id="main">
-  <div class="row">
-    {% include 'header.html' %}
-  </div>
-
   {% for image in album %}
-    {% set url_raw = url_for("routes.paste_view", _type="i", uid=image['uid'], raw="raw") %}
+    {% set url_raw = url_for("routes.paste_view", _type="i", uid=image['uid'], extension=image['extension']) %}
     <div class="row">
       <div class="col-md-12 col-sm-12">
         <div class="panel panel-default">
-          <div class="panel-heading"></div>
           <div class="panel-body paste-body">
               <div class="imgg">
                 <a href="{{ url_raw }}" target="_blank">

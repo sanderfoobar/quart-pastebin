@@ -1,6 +1,7 @@
+import string
+import random
 import json
 import os
-import uuid
 from typing import Union, List
 
 import magic
@@ -12,7 +13,7 @@ import settings
 
 class Pastes:
     @staticmethod
-    async def read_album_uid(uid: Union[str, uuid.UUID]) -> Union[dict, None]:
+    async def read_album_uid(uid: str) -> Union[dict, None]:
         """
         Return album by uuid
         :return: metadata dict
@@ -24,7 +25,7 @@ class Pastes:
         return await Pastes.read_album_path(fn)
 
     @staticmethod
-    async def read_plain_uid(uid: Union[str, uuid.UUID]) -> Union[dict, None]:
+    async def read_plain_uid(uid: str) -> Union[dict, None]:
         """
         Return paste by uuid
         :return: metadata dict
@@ -36,7 +37,7 @@ class Pastes:
         return await Pastes.read_plain_path(fn)
 
     @staticmethod
-    async def read_image_uid(uid: Union[str, uuid.UUID]) -> Union[None, bytes]:
+    async def read_image_uid(uid: str) -> Union[None, bytes]:
         """
         Return a single image by uuid
         :param uid:
@@ -58,7 +59,7 @@ class Pastes:
         :param syntax: syntax highlighting
         :return: uid
         """
-        uid = str(uuid.uuid4())
+        uid = Pastes.generate_uid()
         out_dir = os.path.join(settings.cwd, "data")
         out_path = os.path.join(out_dir, f"{uid}.{'expires.' if expiration > 0 else ''}paste")
 
@@ -67,7 +68,8 @@ class Pastes:
             "mimetype": "text/plain",
             "syntax": syntax,
             "uid": uid,
-            "expiration": expiration
+            "expiration": expiration,
+            "extension": "txt"
         }, sort_keys=True)
 
         async with aiofiles.open(out_path, mode="wb") as f:
@@ -76,6 +78,10 @@ class Pastes:
             await f.write(contents)
 
         return uid
+
+    @staticmethod
+    def generate_uid() -> str:
+        return ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
 
     @staticmethod
     async def write_image(contents: bytes, expiration: int = 0) -> dict:
@@ -92,12 +98,14 @@ class Pastes:
             raise Exception(f"An image with for uploader {request.remote_addr} "
                             f"has an invalid mimetype of {mime}")
         extension = mime.split("/", 1)[1]
+        if not extension.isalnum():
+            raise Exception("bad extension")
 
         # exif removal
         if mime in ["image/jpeg", "image/jpg", "image/png"]:
             contents = await image_sanitize(contents, extension)
 
-        uid = str(uuid.uuid4())
+        uid = Pastes.generate_uid()
         out_path = os.path.join(settings.cwd, "data", f"{uid}.png")
 
         async with aiofiles.open(out_path, mode="wb") as f:
@@ -108,6 +116,7 @@ class Pastes:
             "mimetype": mime,
             "uid": uid,
             "filepath": out_path,
+            "extension": extension,
             "filename": os.path.basename(out_path),
             "expiration": expiration
         }
@@ -120,7 +129,7 @@ class Pastes:
         Writes a collection of images
         :param images:
         :param expiration:
-        :return: uuid
+        :return: str
         """
         data = []
         for image in images:
@@ -132,7 +141,7 @@ class Pastes:
         if not data:
             raise Exception("no content")
 
-        uid = str(uuid.uuid4())
+        uid = Pastes.generate_uid()
         metadata = json.dumps(data, sort_keys=True)
         out_dir = os.path.join(settings.cwd, "data")
         out_path = os.path.join(out_dir, f"{uid}.{'expires.' if expiration > 0 else ''}album")
@@ -164,7 +173,8 @@ class Pastes:
             "uid": metadata.get("uid", ""),
             "content": content.decode('utf-8', 'ignore'),
             "syntax": metadata.get("syntax", ""),
-            "expiration": metadata.get("expiration")
+            "expiration": metadata.get("expiration"),
+            "extension": metadata.get("extension")
         }
 
     @staticmethod
@@ -181,14 +191,11 @@ class Pastes:
             app.logger.error(f"Could not read {path}; {ex}")
 
     @staticmethod
-    async def find_by_uid(uid: Union[str, uuid.UUID]) -> str:
+    async def find_by_uid(uid: str) -> str:
         """
-        :param uid: paste/album/img uuid
+        :param uid: paste/album/img uid
         :return: path as string
         """
-        if isinstance(uid, uuid.UUID):
-            uid = str(uid)
-
         data_dir = os.path.join(settings.cwd, "data")
         cmd = f"""
         find {data_dir} -name "{uid}.*"
